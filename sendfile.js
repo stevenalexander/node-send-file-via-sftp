@@ -3,24 +3,18 @@ var port = process.env.SFTP_PORT
 var user = process.env.SFTP_USER
 var password = process.env.SFTP_PASSWORD
 
-var Client = require('ssh2').Client
+var config = {
+  host: host,
+  port: port,
+  username: user,
+  password: password
+}
 
-var conn = new Client()
-conn
-  .on('ready', function () {
-    console.log('Client :: ready')
-    conn.sftp(function (err, sftp) {
-      if (err) throw err
-      sftp.readdir('.', function (err, list) {
-        if (err) throw err
-        console.dir(list)
-        conn.end()
-      })
-    })
-  })
-  .connect({
-    host: host,
-    port: port,
-    username: user,
-    password: password
+var SFTPClient = require('sftp-promises')
+var sftp = new SFTPClient(config)
+
+sftp
+  .put('test.csv', './upload/test.csv')
+  .then(function () {
+    return sftp.ls('./upload').then(function (list) { console.log(list) })
   })

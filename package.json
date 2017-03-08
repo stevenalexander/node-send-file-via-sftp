@@ -6,6 +6,6 @@
     "start": "node sendfile.js"
   },
   "dependencies": {
-    "ssh2": "^0.5.4"
+    "sftp-promises": "^1.4.0"
   }
 }
